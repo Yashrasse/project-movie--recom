@@ -60,3 +60,12 @@ if st.button('Search'):
         st.text(names[4])
     st.badge("Succeed", color="green")
     st.write('You selected:', selected_movie_name)
+
+
+import os
+import gdown
+
+# Download similarity.pkl if not present
+if not os.path.exists("similarity.pkl"):
+    url = "1ILnjEBHi9MJqewTLF5K_X8Bz7gdJIeWT"  # Replace with your file's ID
+    gdown.download(url, "similarity.pkl", quiet=False)
