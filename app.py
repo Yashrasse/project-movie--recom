@@ -1,6 +1,27 @@
 import streamlit as st
 import pickle
 import requests
+# background image
+import base64
+
+def set_background(image_file):
+    with open(image_file, "rb") as image:
+        encoded = base64.b64encode(image.read()).decode()
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/jpg;base64,{encoded}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+set_background("movies_background.jpg")
+
 def fetch_poster(movie_id):
     response = requests.get(f'https://api.themoviedb.org/3/movie/{movie_id}?api_key=9f69bbb143da9c0df51d9be476f8d5c8&language=en-US')
     data = response.json()
@@ -36,28 +57,53 @@ if st.button('Search'):
     # Show the selected movie and its poster
     selected_movie_id = movies_df[movies_df['title'] == selected_movie_name].iloc[0].movie_id
     selected_movie_poster = fetch_poster(selected_movie_id)
-    st.subheader("You searched for:")
-    st.text(selected_movie_name)
-    st.image(selected_movie_poster, width=150)
 
+# Display selected movie
+    st.subheader("You searched for:")
+    #st.text(selected_movie_name)
+    #st.markdown(f"<img src='{selected_movie_poster}' class='movie-poster' width='150'>", unsafe_allow_html=True)
+    
+    st.markdown(f"""
+        <div style='text-align: center;'>
+            <a href="https://www.google.com/search?q={selected_movie_name+' movie'.replace(' ', '+')}" target="_blank">
+                <img src="{selected_movie_poster}" class="movie-poster" width="150">
+            </a>
+        <!-- <p style='color: white; font-size: 18px; margin-top: 8px;'>{selected_movie_name}</p> -->
+        <a href="https://www.google.com/search?q={selected_movie_name.replace(' ', '+')}+movie" target="_blank">
+                    <p class="movie-title"; style="text-decoration: none;">{selected_movie_name}</p>
+            </a>
+       </div>
+        """.format(selected_movie_poster, selected_movie_name), unsafe_allow_html=True)
+
+
+
+# Top 5 recommended movies :
     st.header("Top 5 recommended movies :")
     names, posters = recommend(selected_movie_name)
-    col1, col2, col3,col4,col5 = st.columns(5)
-    with col1:
-        st.image(posters[0], width=150)
-        st.text(names[0])
-    with col2:
-        st.image(posters[1], width=150)
-        st.text(names[1])
-    with col3:
-        st.image(posters[2], width=150)
-        st.text(names[2])
-    with col4:
-        st.image(posters[3], width=150)
-        st.text(names[3])
-    with col5:
-        st.image(posters[4], width=150)
-        st.text(names[4])
+    # col1, col2, col3,col4,col5 = st.columns(5)
+    # for i in range(5):
+    #     cols = [col1, col2, col3, col4, col5]
+    #     with cols[i]:
+    #         st.markdown(f"<img src='{posters[i]}' class='movie-poster' width='150'>", unsafe_allow_html=True)
+    #         st.markdown(f"""<p style='color: lightblue; font-size: 18px; margin-top: 8px;'>{names[i]}</p>""",unsafe_allow_html=True)
+
+    cols = st.columns(5)
+    for i in range(5):
+        with cols[i]:
+            st.markdown(f"""
+            <a href="https://www.google.com/search?q={names[i]+' movie'.replace(' ', '+')}" target="_blank">
+                <img src="{posters[i]}" class="movie-poster" width="150">
+            </a>
+           <!-- <p style='text-align: center; color: white;'>{names[i]}</p> --> 
+
+            <a href="https://www.google.com/search?q={names[i].replace(' ', '+')}+movie" target="_blank">
+                    <p class="movie-title"; style="text-decoration: none;">{names[i]}</p>
+            </a>
+            """, unsafe_allow_html=True)
+
+
+
+
     st.badge("Succeed", color="green")
     st.write('You selected:', selected_movie_name)
 
@@ -69,3 +115,43 @@ import gdown
 if not os.path.exists("similarity.pkl"):
     url = "1ILnjEBHi9MJqewTLF5K_X8Bz7gdJIeWT"  # Replace with your file's ID
     gdown.download(url, "similarity.pkl", quiet=False)
+
+
+st.markdown("""
+    <style>
+    a {
+    text-decoration: none;
+    }
+
+    .movie-poster:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        z-index: 1;
+    }
+    .movie-poster {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 8px;
+        margin: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .movie-title {
+        color: white;
+        font-size: 16px;
+        margin: 0;
+        transition: color 0.3s ease;
+        text-align: center
+        
+    }
+    a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
+    }
+
+    .movie-title:hover {
+        color: #00BFFF; /* DeepSkyBlue */
+        text-align: center
+    
+    </style>
+""", unsafe_allow_html=True)
