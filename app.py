@@ -43,7 +43,10 @@ def recommend(movie_title):
         recommended_movie_posters.append(fetch_poster(movies_df.iloc[i[0]].movie_id))
     return recommended_movies,recommended_movie_posters
 
+# Title
 st.title('Movie Recommender System')
+
+
 
 movies_df = pickle.load(open('movies.pkl','rb'))
 similarity = pickle.load(open('similarity.pkl','rb'))
@@ -59,23 +62,25 @@ if st.button('Search'):
     selected_movie_poster = fetch_poster(selected_movie_id)
 
 # Display selected movie
-    st.subheader("You searched for:")
+    st.subheader("You searched for: ")
+    st.markdown("""<div style='color: yellow'> <p>Click to Download Movie <p> </div>""",unsafe_allow_html=True)
+    #st.markdown("### :blue[You searched for:]")
     #st.text(selected_movie_name)
     #st.markdown(f"<img src='{selected_movie_poster}' class='movie-poster' width='150'>", unsafe_allow_html=True)
-    
+   # https://hdhub4u.tokyo/?s=iron+man
     st.markdown(f"""
         <div style='text-align: center;'>
-            <a href="https://www.google.com/search?q={selected_movie_name+' movie'.replace(' ', '+')}" target="_blank">
+            <a href="https://hdhub4u.tokyo/?s={selected_movie_name.replace(' ', '+')}" target="_blank">
                 <img src="{selected_movie_poster}" class="movie-poster" width="150">
             </a>
         <!-- <p style='color: white; font-size: 18px; margin-top: 8px;'>{selected_movie_name}</p> -->
-        <a href="https://www.google.com/search?q={selected_movie_name.replace(' ', '+')}+movie" target="_blank">
+        <a href="https://hdhub4u.tokyo/?s={selected_movie_name.replace(' ', '+')}" target="_blank">
                     <p class="movie-title"; style="text-decoration: none;">{selected_movie_name}</p>
             </a>
        </div>
         """.format(selected_movie_poster, selected_movie_name), unsafe_allow_html=True)
 
-
+    st.markdown('''<hr>''', unsafe_allow_html=True)
 
 # Top 5 recommended movies :
     st.header("Top 5 recommended movies :")
@@ -91,21 +96,24 @@ if st.button('Search'):
     for i in range(5):
         with cols[i]:
             st.markdown(f"""
-            <a href="https://www.google.com/search?q={names[i]+' movie'.replace(' ', '+')}" target="_blank">
+            <a href="https://hdhub4u.tokyo/?s={names[i].replace(' ', '+')}" target="_blank">
                 <img src="{posters[i]}" class="movie-poster" width="150">
             </a>
            <!-- <p style='text-align: center; color: white;'>{names[i]}</p> --> 
 
-            <a href="https://www.google.com/search?q={names[i].replace(' ', '+')}+movie" target="_blank">
+            <a href="https://hdhub4u.tokyo/?s={names[i].replace(' ', '+')}" target="_blank">
                     <p class="movie-title"; style="text-decoration: none;">{names[i]}</p>
             </a>
             """, unsafe_allow_html=True)
 
+    st.markdown('''<hr>''', unsafe_allow_html=True)
 
-
+    st.write("Click Here to Download leatest Movies :")
+    st.markdown("""<a href="https://hdhub4u.tokyo/?utm=mn&tx=8"> HDHUB4u</a>""", unsafe_allow_html=True)
 
     st.badge("Succeed", color="green")
     st.write('You selected:', selected_movie_name)
+
 
 
 import os
