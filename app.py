@@ -70,11 +70,11 @@ if st.button('Search'):
    # https://hdhub4u.tokyo/?s=iron+man
     st.markdown(f"""
         <div style='text-align: center;'>
-            <a href="https://hdhub4u.tokyo/?s={selected_movie_name.replace(' ', '+')}" target="_blank">
+            <a href="https://hdhub4u.tokyo/?s={selected_movie_name+' movie'.replace(' ', '+')}" target="_blank">
                 <img src="{selected_movie_poster}" class="movie-poster" width="150">
             </a>
         <!-- <p style='color: white; font-size: 18px; margin-top: 8px;'>{selected_movie_name}</p> -->
-        <a href="https://hdhub4u.tokyo/?s={selected_movie_name.replace(' ', '+')}" target="_blank">
+        <a href="https://hdhub4u.tokyo/?s={selected_movie_name+' movie'.replace(' ', '+')}" target="_blank">
                     <p class="movie-title"; style="text-decoration: none;">{selected_movie_name}</p>
             </a>
        </div>
@@ -96,12 +96,12 @@ if st.button('Search'):
     for i in range(5):
         with cols[i]:
             st.markdown(f"""
-            <a href="https://hdhub4u.tokyo/?s={names[i].replace(' ', '+')}" target="_blank">
+            <a href="https://hdhub4u.tokyo/?s={names[i]+' movie'.replace(' ', '+')}" target="_blank">
                 <img src="{posters[i]}" class="movie-poster" width="150">
             </a>
            <!-- <p style='text-align: center; color: white;'>{names[i]}</p> --> 
 
-            <a href="https://hdhub4u.tokyo/?s={names[i].replace(' ', '+')}" target="_blank">
+            <a href="https://hdhub4u.tokyo/?s={names[i]+' movie'.replace(' ', '+')}" target="_blank">
                     <p class="movie-title"; style="text-decoration: none;">{names[i]}</p>
             </a>
             """, unsafe_allow_html=True)
