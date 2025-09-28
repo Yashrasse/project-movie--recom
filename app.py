@@ -21,7 +21,12 @@ def set_background(image_file):
         unsafe_allow_html=True
     )
 set_background("movies_background.jpg")
-
+st.set_page_config(
+    page_title=" Movie Predictions",
+    page_icon="🎬",
+#     layout="wide",
+#     initial_sidebar_state="expanded"
+ )
 def fetch_poster(movie_id):
     response = requests.get(f'https://api.themoviedb.org/3/movie/{movie_id}?api_key=9f69bbb143da9c0df51d9be476f8d5c8&language=en-US')
     data = response.json()
